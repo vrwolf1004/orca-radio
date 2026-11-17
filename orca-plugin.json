@@ -2,7 +2,7 @@
   "manifestVersion": 2,
   "id": "radio-for-orca",
   "name": "Radio for Orca",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Orca 사이드바에서 인터넷 라디오를 재생한다.",
   "license": "MIT",
   "engines": {
