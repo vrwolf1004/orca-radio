@@ -1,24 +1,30 @@
 # Orca Radio
 
-Orca 플러그인. 현재는 기본 골격만 있다.
+English | [**한국어**](README.ko.md)
 
-## 구조
+An Orca plugin for listening to internet radio from the sidebar. The panel looks like an old radio: pick a station on a frequency dial, then play, stop, and adjust the volume.
 
-- `orca-plugin.json` — 플러그인 매니페스트 (manifestVersion 2)
+## Features
 
-## 실행 프로필
+- **Frequency dial**: a needle shows the current station's position on a 89.1–108.0 MHz scale.
+- **CH list**: press `CH` to open the station list; choose an entry to start playing it.
+- **Playback controls**: previous channel, play, stop, next channel, volume.
+- **Three designs**: press `T` to switch between A (vintage brass, default), B (hi-fi walnut), and C (retro charcoal). The choice is remembered.
+- **Playing indicators**: while playing, the dial glows faintly and the power lamp on the grille blinks.
+- **Station list**: 28 stations across 6 genres (`src/stations.ts`).
 
-매니페스트의 `execution` 은 필요한 권한의 최소 단위로 고른다.
+## Requirements
 
-- `data` — 테마, 번역 등 데이터만
-- `declarative` — 명령, 단축키 (현재 설정)
-- `sandboxed-ui` — 패널
-- `trusted-worker` — `main` 모듈 (백그라운드 로직, 재생 등)
+- Tested on **Windows**.
+- **mpv** must be installed. The worker uses only the absolute paths `C:\Program Files\MPV Player\mpv.exe` or `C:\Program Files\mpv\mpv.exe`. It does not search PATH. If neither exists, playback is refused and an error is shown.
 
-기능을 추가할 때 `contributes` 와 `capabilities` 를 채우고, 필요하면 `execution` 을 올린다.
+## Known limitations
 
-## 다음 단계
+- Playback runs in an mpv process started by the worker. The panel's `<audio>` element is not used because Orca's sandbox blocks external streams.
+- Some station URLs may be unreachable; availability varies by station.
+- Frequencies are assigned arbitrarily and do not match real broadcast frequencies.
+- If the worker exits abnormally, its mpv process may be left running.
 
-1. 필요한 기능 정하기 (재생, 스테이션 목록, 패널 등)
-2. 해당 실행 프로필로 `execution` 상향
-3. Orca 에 로컬 플러그인으로 설치해 동작 확인
+## License
+
+MIT. See [LICENSE](LICENSE).

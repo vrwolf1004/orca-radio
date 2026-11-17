@@ -1,9 +1,11 @@
 {
   "manifestVersion": 2,
   "id": "orca-radio",
+  "publisher": "vrwolf1004",
   "name": "Orca Radio",
-  "version": "0.1.0",
+  "version": "0.6.0",
   "description": "Orca 사이드바에서 인터넷 라디오를 재생한다.",
+  "license": "MIT",
   "engines": {
     "orca": ">=1.4.246"
   },

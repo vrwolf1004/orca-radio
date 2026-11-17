@@ -25,8 +25,9 @@ function serial<T>(task: () => Promise<T>): Promise<T> {
   return run
 }
 
-function mpvPath(): string {
-  return MPV_CANDIDATES.find((path) => existsSync(path)) ?? 'mpv'
+// PATH 의 mpv 는 쓰지 않는다 (cwd 등 신뢰하지 않는 위치의 실행 파일을 띄울 수 있다). 절대 경로만 쓴다.
+function mpvPath(): string | null {
+  return MPV_CANDIDATES.find((path) => existsSync(path)) ?? null
 }
 
 function running(): boolean {
@@ -54,8 +55,13 @@ function killPlayer(): Promise<void> {
 async function play(url: string): Promise<void> {
   await killPlayer()
   lastError = null
+  const exe = mpvPath()
+  if (!exe) {
+    lastError = 'mpv 를 찾지 못했습니다. ' + MPV_CANDIDATES[0] + ' 에 설치하세요.'
+    throw Object.assign(new Error(lastError), { code: 'mpv_not_found' })
+  }
   const child = spawn(
-    mpvPath(),
+    exe,
     ['--no-video', '--no-terminal', '--really-quiet', '--network-timeout=5', '--title=orca-radio', `--input-ipc-server=${PIPE}`, url],
     { detached: true, stdio: 'ignore', windowsHide: true }
   )
