@@ -1,4 +1,4 @@
-# Orca Radio
+# Radio for Orca
 
 English | [**한국어**](README.ko.md)
 
@@ -7,13 +7,13 @@ An Orca plugin for listening to internet radio from the sidebar. The panel looks
 
 ## Screenshots
 
-![Panel (playing)](docs/design-shots/screenshot-final.png)
+![Panel (playing)](docs/design-shots/screenshot-final.png?v=2)
 
 | Design A (brass) | Design B (walnut) | Design C (charcoal) |
 | --- | --- | --- |
-| ![A](docs/design-shots/design-a-final.png) | ![B](docs/design-shots/design-b-final.png) | ![C](docs/design-shots/design-c-final.png) |
+| ![A](docs/design-shots/design-a-final.png?v=2) | ![B](docs/design-shots/design-b-final.png?v=2) | ![C](docs/design-shots/design-c-final.png?v=2) |
 
-![Channel list open](docs/design-shots/channel-window.png)
+![Channel list open](docs/design-shots/channel-window.png?v=2)
 
 ## Features
 

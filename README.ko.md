@@ -1,4 +1,4 @@
-# Orca Radio
+# Radio for Orca
 
 [**English**](README.md) | 한국어
 
@@ -7,13 +7,13 @@ Orca 사이드바에서 인터넷 라디오를 듣는 플러그인입니다. 옛
 
 ## 화면
 
-![패널 (재생 중)](docs/design-shots/screenshot-final.png)
+![패널 (재생 중)](docs/design-shots/screenshot-final.png?v=2)
 
 | 디자인 A (황동) | 디자인 B (월넛) | 디자인 C (차콜) |
 | --- | --- | --- |
-| ![A](docs/design-shots/design-a-final.png) | ![B](docs/design-shots/design-b-final.png) | ![C](docs/design-shots/design-c-final.png) |
+| ![A](docs/design-shots/design-a-final.png?v=2) | ![B](docs/design-shots/design-b-final.png?v=2) | ![C](docs/design-shots/design-c-final.png?v=2) |
 
-![채널 목록 펼침](docs/design-shots/channel-window.png)
+![채널 목록 펼침](docs/design-shots/channel-window.png?v=2)
 
 ## 기능
 
