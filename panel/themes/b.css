@@ -1,0 +1,39 @@
+/* 디자인 B - 클래식 하이파이: 짙은 월넛 + 브러시드 골드. 게이지·볼륨 형태는 base 그대로 */
+.radio {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.35)),
+    repeating-linear-gradient(90deg, #3a2517 0 1px, #2e1d12 1px 5px, #3a2517 5px 6px);
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 1px #6b4f2c, inset 0 0 0 3px #1c120a, 0 8px 18px rgba(0,0,0,0.6);
+}
+
+.radio-top { color: #d6b36a; letter-spacing: 4px; }
+.brand { font-family: Georgia, serif; }
+
+.dial { background: linear-gradient(180deg, #5b4726, #d6b36a 50%, #5b4726); border-radius: 4px; }
+
+/* 기계식 스위치: 작고 정교한 금속 키 */
+.btn {
+  border: 1px solid #0d0804;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #7a6038, #3d2e18);
+  color: #e9d29a;
+  box-shadow: inset 0 1px 0 rgba(255,235,180,0.25), 0 2px 0 #140c05;
+}
+.btn-primary { background: linear-gradient(180deg, #f1d58a, #b08a3e); color: #2a1a08; }
+.ctl-btn { width: 48px; height: 34px; }
+
+/* CHANNEL: 작은 금속 셀렉터 */
+.ch-btn { border-radius: 2px; min-width: 110px; letter-spacing: 3px; font-size: 11px; }
+
+/* 스피커: 촘촘한 미세 패턴 */
+.grille {
+  background: repeating-linear-gradient(0deg, #1b140c 0 2px, #3b2f20 2px 3px), #15100a;
+  border-radius: 3px;
+}
+
+.knob { accent-color: #d6b36a; }
+.status { color: #e9d29a; text-shadow: none; letter-spacing: 2px; }
+.channel-window { background: linear-gradient(180deg, #3a2517, #1f140b); border-radius: 4px; }
+.channel-window-head { color: #d6b36a; letter-spacing: 4px; }
+.station-list { background: #2a1b10; color: #e9d29a; }

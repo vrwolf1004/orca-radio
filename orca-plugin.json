@@ -1,0 +1,23 @@
+{
+  "manifestVersion": 2,
+  "id": "orca-radio",
+  "name": "Orca Radio",
+  "version": "0.1.0",
+  "description": "Orca 사이드바에서 인터넷 라디오를 재생한다.",
+  "engines": {
+    "orca": ">=1.4.246"
+  },
+  "execution": "trusted-worker",
+  "pluginApi": 1,
+  "contributes": {
+    "panels": [
+      {
+        "id": "radio",
+        "title": "Radio",
+        "entry": "panel/index.html"
+      }
+    ]
+  },
+  "capabilities": [],
+  "main": "src/worker.ts"
+}
