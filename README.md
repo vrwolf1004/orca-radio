@@ -4,6 +4,17 @@ English | [**한국어**](README.ko.md)
 
 An Orca plugin for listening to internet radio from the sidebar. The panel looks like an old radio: pick a station on a frequency dial, then play, stop, and adjust the volume.
 
+
+## Screenshots
+
+![Panel (playing)](docs/design-shots/screenshot-final.png)
+
+| Design A (brass) | Design B (walnut) | Design C (charcoal) |
+| --- | --- | --- |
+| ![A](docs/design-shots/design-a-final.png) | ![B](docs/design-shots/design-b-final.png) | ![C](docs/design-shots/design-c-final.png) |
+
+![Channel list open](docs/design-shots/channel-window.png)
+
 ## Features
 
 - **Frequency dial**: a needle shows the current station's position on a 89.1–108.0 MHz scale.

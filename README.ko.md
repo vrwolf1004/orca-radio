@@ -4,6 +4,17 @@
 
 Orca 사이드바에서 인터넷 라디오를 듣는 플러그인입니다. 옛날 라디오 모양의 패널에서 주파수 눈금으로 방송을 고르고, 재생, 정지, 볼륨을 조절합니다.
 
+
+## 화면
+
+![패널 (재생 중)](docs/design-shots/screenshot-final.png)
+
+| 디자인 A (황동) | 디자인 B (월넛) | 디자인 C (차콜) |
+| --- | --- | --- |
+| ![A](docs/design-shots/design-a-final.png) | ![B](docs/design-shots/design-b-final.png) | ![C](docs/design-shots/design-c-final.png) |
+
+![채널 목록 펼침](docs/design-shots/channel-window.png)
+
 ## 기능
 
 - **주파수 눈금**: 89.1 ~ 108.0 MHz 눈금에서 현재 방송의 위치를 바늘로 표시합니다.
