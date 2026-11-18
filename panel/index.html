@@ -18,23 +18,23 @@
       <div class="dial-window">
         <div class="dial-scale" aria-hidden="true"><i class="tick" style="left:0.00%"></i><i class="tick" style="left:5.29%"></i><i class="tick" style="left:10.58%"></i><i class="tick" style="left:15.87%"></i><i class="tick" style="left:21.16%"></i><i class="tick" style="left:26.46%"></i><i class="tick" style="left:31.75%"></i><i class="tick" style="left:37.04%"></i><i class="tick" style="left:42.33%"></i><i class="tick" style="left:47.62%"></i><i class="tick" style="left:52.91%"></i><i class="tick" style="left:58.20%"></i><i class="tick" style="left:63.49%"></i><i class="tick" style="left:68.78%"></i><i class="tick" style="left:74.07%"></i><i class="tick" style="left:79.37%"></i><i class="tick" style="left:84.66%"></i><i class="tick" style="left:89.95%"></i><i class="tick" style="left:95.24%"></i><i class="tick" style="left:100.53%"></i><span class="fl" style="left:0.00%">89.1</span><span class="fl" style="left:41.80%">97.0</span><span class="fl" style="left:62.96%">101.0</span><span class="fl" style="left:100.00%">108.0</span></div>
         <div class="needle-track" aria-hidden="true"><div class="needle"></div></div>
-        <div id="station-name" class="station-name">-- 방송 없음 --</div>
+        <div id="station-name" class="station-name" data-i18n="station.none">-- No station --</div>
       </div>
     </div>
 
     <div class="channel-bar">
-      <button id="theme-toggle" class="btn round-btn" type="button" title="디자인 바꾸기">T</button>
-      <button id="channel-toggle" class="btn round-btn" type="button" aria-expanded="false" aria-controls="channel-window" title="채널">CH</button>
+      <button id="theme-toggle" class="btn round-btn" type="button" data-i18n-title="button.theme" title="Change design">T</button>
+      <button id="channel-toggle" class="btn round-btn" type="button" aria-expanded="false" aria-controls="channel-window" data-i18n-title="button.channel" title="Channel">CH</button>
 
     </div>
 
     <div class="grille" aria-hidden="true"></div>
 
     <div class="controls">
-      <button id="prev" class="btn ctl-btn" type="button" title="이전 채널">&#9664;&#9664;</button>
-      <button id="play" class="btn ctl-btn btn-primary" type="button" title="재생">&#9654;</button>
-      <button id="stop" class="btn ctl-btn" type="button" title="정지">&#9632;</button>
-      <button id="next" class="btn ctl-btn" type="button" title="다음 채널">&#9654;&#9654;</button>
+      <button id="prev" class="btn ctl-btn" type="button" data-i18n-title="button.prev" title="Previous channel">&#9664;&#9664;</button>
+      <button id="play" class="btn ctl-btn btn-primary" type="button" data-i18n-title="button.play" title="Play">&#9654;</button>
+      <button id="stop" class="btn ctl-btn" type="button" data-i18n-title="button.stop" title="Stop">&#9632;</button>
+      <button id="next" class="btn ctl-btn" type="button" data-i18n-title="button.next" title="Next channel">&#9654;&#9654;</button>
     </div>
 
     <div class="knob-row">
@@ -42,12 +42,12 @@
       <input id="volume" class="knob" type="range" min="0" max="1" step="0.01" value="0.8">
     </div>
 
-    <div id="status" class="status">대기 중</div>
+    <div id="status" class="status" data-i18n="status.idle">Ready</div>
   </div>
 
   <div id="channel-drawer" class="channel-drawer">
     <div class="channel-drawer-inner">
-      <section id="channel-window" class="channel-window" aria-label="채널 목록">
+      <section id="channel-window" class="channel-window" data-i18n-aria="channel.list" aria-label="Channel list">
         <div class="channel-window-head">CHANNEL</div>
         <ul id="station-list" class="station-list"></ul>
       </section>

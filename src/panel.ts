@@ -3,6 +3,7 @@
 
 import { STATIONS, type Station } from './stations'
 import { needleLeftPercent, stepVolume } from './logic'
+import { applyI18n, t } from './i18n'
 
 // 패널 프레임의 orca 전역 (sandboxed-ui). 워커의 orca.panels.handle(name) 을 부른다.
 declare const orca: { plugin: { request(name: string, input?: unknown): Promise<unknown> } }
@@ -115,7 +116,7 @@ async function call(name: string, input?: unknown): Promise<unknown> {
     return await orca.plugin.request(name, input)
   } catch (error) {
     console.error(`radio: ${name} 실패`, error)
-    setStatus('오류')
+    setStatus(t('status.error'))
     throw error
   }
 }
@@ -124,7 +125,7 @@ async function call(name: string, input?: unknown): Promise<unknown> {
 async function play(): Promise<void> {
   wantPlaying = true
   playStartedAt = Date.now()
-  setStatus('연결 중')
+  setStatus(t('status.connecting'))
   const reply = await call('play', { url: currentStation().url, volume: Number(volumeInput.value) }).catch(() => undefined)
   const volume = (reply as { volume: number | null } | undefined)?.volume
   if (typeof volume === 'number') volumeInput.value = String(volume)
@@ -143,7 +144,7 @@ function setVolume(value: number): void {
 async function stop(): Promise<void> {
   wantPlaying = false
   setPlayingUi(false)
-  setStatus('정지')
+  setStatus(t('status.stopped'))
   await call('stop').catch(() => undefined)
 }
 
@@ -176,18 +177,18 @@ async function refreshStatus(): Promise<void> {
   if (status.state === 'playing') {
     wantPlaying = true
     setPlayingUi(true)
-    setStatus('재생 중')
+    setStatus(t('status.playing'))
     return
   }
   setPlayingUi(false)
   if (!wantPlaying) {
-    setStatus('정지')
+    setStatus(t('status.stopped'))
     return
   }
   // 재생을 요청했는데 mpv 가 없다: 뜨는 중이면 기다리고, 시간이 지나면 오류로 본다.
   if (Date.now() - playStartedAt > START_GRACE_MS) {
     wantPlaying = false
-    setStatus('오류')
+    setStatus(t('status.error'))
     console.error('radio: mpv 가 실행되지 않음', status.lastError)
   }
 }
@@ -225,5 +226,6 @@ document.addEventListener('pointerdown', (event) => {
 volumeInput.value = String(DEFAULT_VOLUME)
 renderStationList()
 renderStation()
-setStatus('대기 중')
+applyI18n()
+setStatus(t('status.idle'))
 setInterval(() => void refreshStatus(), POLL_MS)
