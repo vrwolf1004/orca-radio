@@ -54,7 +54,9 @@ src/panel.ts       패널 로직 (core 담당: dev)
 | `station-name` | element | 방송국 이름 |
 | `status` | element | 상태 문구 |
 | `audio` | audio | 실제 재생 요소 |
-| `channels` | div | 채널 줄. dev 가 방송국마다 `.channel` 을 만들고 현재 것에 `.is-active` |
+| `channel-toggle` | button | CH 버튼. 누르면 채널 창을 열고 닫는다 |
+| `channel-window` | section | 채널 창(목록). 본체 아래에 펼쳐지고 기본은 숨김 |
+| `station-list` | ul | 방송국마다 li > button (이름과 주파수). 현재 방송국은 `.is-active` |
 
 볼륨 슬라이더는 `audio.volume`과 같은 0~1 범위입니다. 0~100으로 바꾸면 `audio.volume` 설정이 실패하므로 바꾸지 않습니다.
 
@@ -66,4 +68,4 @@ src/panel.ts       패널 로직 (core 담당: dev)
 
 - `.radio` 에 `is-playing` 클래스: 재생 중에만 붙인다. 바늘 발광과 상태 글자 깜빡임을 켠다.
 - `.needle` 의 `style.left`: 방송국 위치(%)로 설정한다. 바늘은 CSS transition 으로 움직인다.
-- `#channels` 안의 `.channel`: 방송국마다 하나, 현재 방송국만 `.is-active`. 클릭으로 방송국을 고를 수 있다.
+- `#station-list` 의 현재 방송국 항목: `.is-active`. 항목을 고르면 그 방송국을 재생하고 채널 창을 닫는다.

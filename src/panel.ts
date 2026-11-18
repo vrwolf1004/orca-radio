@@ -2,6 +2,7 @@
 // 요소 id 는 panel/index.html 과의 계약이다. 바꾸면 panel/index.html 도 같이 바꾼다.
 
 import { STATIONS, type Station } from './stations'
+import { needleLeftPercent, stepVolume } from './logic'
 
 // 패널 프레임의 orca 전역 (sandboxed-ui). 워커의 orca.panels.handle(name) 을 부른다.
 declare const orca: { plugin: { request(name: string, input?: unknown): Promise<unknown> } }
@@ -9,12 +10,11 @@ declare const orca: { plugin: { request(name: string, input?: unknown): Promise<
 interface PlayerStatus {
   state: 'playing' | 'stopped'
   pid: number | null
+  volume: number | null
   lastError: string | null
 }
 
-// 눈금판 범위 (chef 의 panel/index.html 눈금과 맞춘다)
-const FREQ_MIN = 89.1
-const FREQ_MAX = 108.0
+const KEY_VOLUME_STEP = 0.05
 const DEFAULT_VOLUME = 0.8
 const POLL_MS = 1000
 // 재생 요청 뒤 mpv 가 뜨기까지 기다려 주는 시간. 이 안에는 '오류'로 바꾸지 않는다.
@@ -40,6 +40,7 @@ const volumeInput = byId<HTMLInputElement>('volume')
 const stationName = byId<HTMLElement>('station-name')
 const statusText = byId<HTMLElement>('status')
 const channelToggle = byId<HTMLButtonElement>('channel-toggle')
+const channelDrawer = byId<HTMLElement>('channel-drawer')
 const channelWindow = byId<HTMLElement>('channel-window')
 const stationList = byId<HTMLUListElement>('station-list')
 const radio = byClass<HTMLElement>('.radio')
@@ -76,11 +77,11 @@ function renderStationList(): void {
 }
 
 function isWindowOpen(): boolean {
-  return !channelWindow.hidden
+  return channelDrawer.classList.contains('is-open')
 }
 
 function setWindowOpen(open: boolean): void {
-  channelWindow.hidden = !open
+  channelDrawer.classList.toggle('is-open', open)
   channelToggle.setAttribute('aria-expanded', String(open))
   if (open) updateHighlights()
 }
@@ -96,7 +97,7 @@ function updateHighlights(): void {
 
 function renderStation(): void {
   stationName.textContent = currentStation().name
-  needle.style.left = `${((currentStation().freq - FREQ_MIN) / (FREQ_MAX - FREQ_MIN)) * 100}%`
+  needle.style.left = `${needleLeftPercent(currentStation().freq)}%`
   updateHighlights()
 }
 
@@ -119,11 +120,24 @@ async function call(name: string, input?: unknown): Promise<unknown> {
   }
 }
 
+// 재생을 시작할 때 슬라이더 값을 함께 보낸다. 워커가 mpv 에 적용한 실제 값을 돌려주면 슬라이더를 거기에 맞춘다.
 async function play(): Promise<void> {
   wantPlaying = true
   playStartedAt = Date.now()
   setStatus('연결 중')
-  await call('play', { url: currentStation().url }).catch(() => undefined)
+  const reply = await call('play', { url: currentStation().url, volume: Number(volumeInput.value) }).catch(() => undefined)
+  const volume = (reply as { volume: number | null } | undefined)?.volume
+  if (typeof volume === 'number') volumeInput.value = String(volume)
+}
+
+function togglePlay(): void {
+  if (wantPlaying) void stop()
+  else void play()
+}
+
+function setVolume(value: number): void {
+  volumeInput.value = String(value)
+  void call('volume', { value }).catch(() => undefined)
 }
 
 async function stop(): Promise<void> {
@@ -186,8 +200,21 @@ channelToggle.addEventListener('click', toggleWindow)
 volumeInput.addEventListener('input', () => {
   void call('volume', { value: Number(volumeInput.value) }).catch(() => undefined)
 })
+// 키보드: 입력 칸(볼륨 슬라이더 포함)에 포커스가 있으면 건드리지 않는다.
 document.addEventListener('keydown', (event) => {
+  const target = event.target as HTMLElement
   if (event.key === 'Escape' && isWindowOpen()) setWindowOpen(false)
+  if (target.closest('input, textarea, select, [contenteditable]')) return
+  switch (event.key) {
+    case 'ArrowLeft': move(-1); break
+    case 'ArrowRight': move(1); break
+    case 'ArrowUp': setVolume(stepVolume(Number(volumeInput.value), KEY_VOLUME_STEP)); break
+    case 'ArrowDown': setVolume(stepVolume(Number(volumeInput.value), -KEY_VOLUME_STEP)); break
+    case ' ': togglePlay(); break
+    default: return
+  }
+  // 방향키의 페이지 스크롤, 포커스된 버튼의 Space 클릭과 겹치지 않게 막는다.
+  event.preventDefault()
 })
 // 창과 토글 버튼 둘 다 밖을 누르면 닫는다. 창 안의 빈 곳 클릭은 닫지 않는다.
 document.addEventListener('pointerdown', (event) => {

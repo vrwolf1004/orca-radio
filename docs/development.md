@@ -29,7 +29,7 @@ ORCA="C:\Users\PC\AppData\Local\Programs\orca\resources\bin\orca.exe"
 ## 3. 패널 캡처
 
 ```text
-"$ORCA" plugin shot vrwolf1004.radio-for-orca --panel radio --out <png 경로>
+"$ORCA" plugin shot <플러그인 키> --panel radio --out <png 경로>
 ```
 
 Orca가 그린 그대로 PNG를 저장합니다. 디자인 확인에 쓰고, 기능 동작(재생 등)은 이 캡처로 알 수 없습니다.
@@ -37,7 +37,7 @@ Orca가 그린 그대로 PNG를 저장합니다. 디자인 확인에 쓰고, 기
 ## 4. 로그 확인
 
 ```text
-"$ORCA" plugin logs vrwolf1004.radio-for-orca
+"$ORCA" plugin logs <플러그인 키>
 ```
 
 ## 5. 개발 폴더 제거

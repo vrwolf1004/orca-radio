@@ -442,3 +442,37 @@ html, body {
 @media (prefers-reduced-motion: reduce) {
   .radio.is-playing .grille::after { animation: none; }
 }
+
+/* 채널 창: 본체 아래 서랍. 닫힘 상태는 높이 0 + 창이 위로 가려짐, 열림(.is-open)에서 아래로 나온다 */
+.channel-drawer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s ease;
+  margin: 0 24px;
+}
+
+.channel-drawer.is-open {
+  grid-template-rows: 1fr;
+}
+
+.channel-drawer-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.channel-drawer .channel-window {
+  margin: 0 0 12px;
+  transform: translateY(-100%);
+  transition: transform 0.35s ease;
+}
+
+.channel-drawer.is-open .channel-window {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .channel-drawer,
+  .channel-drawer .channel-window {
+    transition: none;
+  }
+}

@@ -45,10 +45,14 @@
     <div id="status" class="status">대기 중</div>
   </div>
 
-  <section id="channel-window" class="channel-window" aria-label="채널 목록" hidden>
-    <div class="channel-window-head">CHANNEL</div>
-    <ul id="station-list" class="station-list"></ul>
-  </section>
+  <div id="channel-drawer" class="channel-drawer">
+    <div class="channel-drawer-inner">
+      <section id="channel-window" class="channel-window" aria-label="채널 목록">
+        <div class="channel-window-head">CHANNEL</div>
+        <ul id="station-list" class="station-list"></ul>
+      </section>
+    </div>
+  </div>
 
   <script src="theme.js"></script>
   <script type="module" src="../src/panel.ts"></script>
