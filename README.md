@@ -39,3 +39,9 @@ An Orca plugin for listening to internet radio from the sidebar. The panel looks
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+## Support the project
+
+If this project is useful to you, consider buying the developer a coffee.
+
+[![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-Support-FF5E5B?style=for-the-badge&logo=buymeacoffee&logoColor=white)](https://ko-fi.com/dev_ohyt)
