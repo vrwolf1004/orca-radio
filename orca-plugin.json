@@ -45,5 +45,6 @@
   "repository": "https://github.com/vrwolf1004/orca-radio",
   "author": {
     "name": "vrwolf1004"
-  }
+  },
+  "icon": "docs/store/icon.png"
 }
