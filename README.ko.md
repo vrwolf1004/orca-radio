@@ -90,6 +90,12 @@ node --test tests/logic.test.ts tests/i18n.test.ts
 - **방송 목록은 복사본입니다.** herdr-radio 의 목록이 바뀌어도 자동으로 반영되지 않습니다.
 - **mpv 정리**: 재생과 정지 때 `--title=orca-radio` 가 붙은 mpv 를 모두 끝냅니다. 다른 mpv(herdr-radio 등)는 건드리지 않습니다.
 
+## 프로젝트 후원
+
+이 프로젝트가 도움이 되었다면 개발자에게 커피 한 잔 후원을 고려해 주세요.
+
+[![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-Support-FF5E5B?style=for-the-badge&logo=buymeacoffee&logoColor=white)](https://ko-fi.com/dev_ohyt)
+
 ## 라이선스
 
 MIT. [LICENSE](LICENSE) 를 보세요.
