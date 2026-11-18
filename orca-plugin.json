@@ -2,7 +2,7 @@
   "manifestVersion": 2,
   "id": "radio-for-orca",
   "name": "Radio for Orca",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "description": "Orca 사이드바에서 인터넷 라디오를 재생한다.",
   "license": "MIT",
   "engines": {
@@ -20,5 +20,23 @@
     ]
   },
   "capabilities": [],
-  "main": "src/worker.ts"
+  "main": "src/worker.ts",
+  "cover": {
+    "path": "docs/store/cover.png",
+    "alt": "Radio for Orca 패널: 황동 라디오 모양의 인터넷 라디오 플레이어"
+  },
+  "screenshots": [
+    {
+      "path": "docs/store/screenshot-1.png",
+      "alt": "재생 중인 라디오 패널"
+    },
+    {
+      "path": "docs/store/screenshot-2.png",
+      "alt": "채널 목록을 펼친 패널"
+    },
+    {
+      "path": "docs/store/screenshot-3.png",
+      "alt": "디자인 A, B, C 비교"
+    }
+  ]
 }
