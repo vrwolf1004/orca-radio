@@ -6,41 +6,56 @@
 ORCA="C:\Users\PC\AppData\Local\Programs\orca\resources\bin\orca.exe"
 ```
 
-## 1. 매니페스트 검증
+## 1. 테스트
+
+```text
+node --test tests/logic.test.ts tests/i18n.test.ts
+```
+
+`logic`(바늘, 주소, 볼륨)과 `i18n`(언어 키가 모두 같은지, 빈 번역이 없는지)을 확인합니다.
+
+## 2. 매니페스트 검증
 
 ```text
 "$ORCA" plugin validate .
 ```
 
-`orca-plugin.json`과 파일 구조가 맞는지 확인합니다. 실패하면 종료 코드 2를 돌려줍니다.
+`orca-plugin.json`과 파일 구조, 이미지 크기 기준을 확인합니다.
 
-## 2. 개발 폴더 로드
+## 3. 개발 폴더 로드
 
 ```text
 "$ORCA" plugin dev load .
 ```
 
-처음 로드하면 승인이 필요하다는 메시지와 지문(`ap1-...`)이 나옵니다. 이 명령에 `--approve <지문>`을 붙여 다시 실행합니다.
+처음 불러오면 승인 지문(`ap1-...`)이 나옵니다. `--approve <지문>`을 붙여 다시 실행합니다. 파일을 바꾸면 지문이 바뀌므로 다시 승인합니다.
 
-- 승인은 플러그인 버전, 파일 내용, 권한에 묶입니다. 파일을 바꾸면 지문이 바뀌어 다시 승인해야 합니다.
-- 권한(패널) 범위를 넓히면 새 승인이 필요합니다.
-- 승인된 상태에서 코드만 고치면 Orca가 자동으로 다시 불러옵니다.
+워커가 재시작되면 그때 떠 있던 orca-radio mpv 가 같이 종료됩니다. 재생 확인 전에 이 점을 기억하세요.
 
-## 3. 패널 캡처
+## 4. 패널 캡처
 
 ```text
-"$ORCA" plugin shot <플러그인 키> --panel radio --out <png 경로>
+"$ORCA" plugin shot local.radio-for-orca --panel radio --out <png 경로>
 ```
 
-Orca가 그린 그대로 PNG를 저장합니다. 디자인 확인에 쓰고, 기능 동작(재생 등)은 이 캡처로 알 수 없습니다.
+Orca가 그린 그대로 PNG를 저장합니다. 화면 확인에 쓰고, 재생이나 소리는 캡처로 알 수 없습니다.
 
-## 4. 로그 확인
+## 5. 로그와 상태
 
 ```text
-"$ORCA" plugin logs <플러그인 키>
+"$ORCA" plugin logs local.radio-for-orca
+"$ORCA" plugin dev request local.radio-for-orca status
 ```
 
-## 5. 개발 폴더 제거
+`status` 는 워커의 재생 상태(`playing` 또는 `stopped`), mpv pid, 볼륨을 돌려줍니다.
+
+## 6. 재생 확인 (사람)
+
+1. 패널에서 CH 를 열고 방송을 고릅니다. 소리가 나는지 듣습니다.
+2. 정지를 누르고 소리가 멈추는지 확인합니다.
+3. 필요하면 mpv 프로세스를 확인합니다. `--title=orca-radio` 가 붙은 프로세스가 0개여야 합니다.
+
+## 7. 개발 폴더 제거
 
 ```text
 "$ORCA" plugin dev unload .
@@ -50,7 +65,8 @@ Orca가 그린 그대로 PNG를 저장합니다. 디자인 확인에 쓰고, 기
 
 | 항목 | 상태 |
 | --- | --- |
+| 단위 테스트 (logic, i18n) | 통과 |
 | 매니페스트 검증 | 통과 |
 | 개발 폴더 로드, 패널 캡처 | 확인 |
-| 방송국 스트림 재생 | 미확인 |
-| TypeScript 타입체크 | 미확인 (tsc 미설치) |
+| 워커 정지와 mpv 정리 (상태 조회로 확인) | 확인 |
+| 재생 소리, 채널 서랍 펼침, 키보드 조작 | 사람이 직접 확인 필요 |
