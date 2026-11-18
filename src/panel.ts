@@ -3,7 +3,7 @@
 
 import { STATIONS, type Station } from './stations'
 import { needleLeftPercent, stepVolume } from './logic'
-import { applyI18n, t } from './i18n'
+import { applyI18n, cycleLang, t, type Key } from './i18n'
 
 // 패널 프레임의 orca 전역 (sandboxed-ui). 워커의 orca.panels.handle(name) 을 부른다.
 declare const orca: { plugin: { request(name: string, input?: unknown): Promise<unknown> } }
@@ -102,8 +102,17 @@ function renderStation(): void {
   updateHighlights()
 }
 
-function setStatus(text: string): void {
-  statusText.textContent = text
+// 상태는 키로 들고 있어서 언어를 바꿔도 다시 그릴 수 있다.
+let statusKey: Key = 'status.idle'
+function setStatus(key: Key): void {
+  statusKey = key
+  statusText.textContent = t(key)
+}
+
+function changeLang(): void {
+  cycleLang()
+  applyI18n()
+  statusText.textContent = t(statusKey)
 }
 
 function setPlayingUi(playing: boolean): void {
@@ -116,7 +125,7 @@ async function call(name: string, input?: unknown): Promise<unknown> {
     return await orca.plugin.request(name, input)
   } catch (error) {
     console.error(`radio: ${name} 실패`, error)
-    setStatus(t('status.error'))
+    setStatus('status.error')
     throw error
   }
 }
@@ -125,7 +134,7 @@ async function call(name: string, input?: unknown): Promise<unknown> {
 async function play(): Promise<void> {
   wantPlaying = true
   playStartedAt = Date.now()
-  setStatus(t('status.connecting'))
+  setStatus('status.connecting')
   const reply = await call('play', { url: currentStation().url, volume: Number(volumeInput.value) }).catch(() => undefined)
   const volume = (reply as { volume: number | null } | undefined)?.volume
   if (typeof volume === 'number') volumeInput.value = String(volume)
@@ -144,7 +153,7 @@ function setVolume(value: number): void {
 async function stop(): Promise<void> {
   wantPlaying = false
   setPlayingUi(false)
-  setStatus(t('status.stopped'))
+  setStatus('status.stopped')
   await call('stop').catch(() => undefined)
 }
 
@@ -177,18 +186,18 @@ async function refreshStatus(): Promise<void> {
   if (status.state === 'playing') {
     wantPlaying = true
     setPlayingUi(true)
-    setStatus(t('status.playing'))
+    setStatus('status.playing')
     return
   }
   setPlayingUi(false)
   if (!wantPlaying) {
-    setStatus(t('status.stopped'))
+    setStatus('status.stopped')
     return
   }
   // 재생을 요청했는데 mpv 가 없다: 뜨는 중이면 기다리고, 시간이 지나면 오류로 본다.
   if (Date.now() - playStartedAt > START_GRACE_MS) {
     wantPlaying = false
-    setStatus(t('status.error'))
+    setStatus('status.error')
     console.error('radio: mpv 가 실행되지 않음', status.lastError)
   }
 }
@@ -212,6 +221,7 @@ document.addEventListener('keydown', (event) => {
     case 'ArrowUp': setVolume(stepVolume(Number(volumeInput.value), KEY_VOLUME_STEP)); break
     case 'ArrowDown': setVolume(stepVolume(Number(volumeInput.value), -KEY_VOLUME_STEP)); break
     case ' ': togglePlay(); break
+    case 'F2': changeLang(); break
     default: return
   }
   // 방향키의 페이지 스크롤, 포커스된 버튼의 Space 클릭과 겹치지 않게 막는다.
@@ -227,5 +237,5 @@ volumeInput.value = String(DEFAULT_VOLUME)
 renderStationList()
 renderStation()
 applyI18n()
-setStatus(t('status.idle'))
+setStatus('status.idle')
 setInterval(() => void refreshStatus(), POLL_MS)

@@ -113,9 +113,21 @@ export type Key = keyof typeof MESSAGES.en
 
 const LANGS = Object.keys(MESSAGES) as Lang[]
 
+const LANG_KEY = 'orca-radio-lang'
+
+// F2 로 고른 언어가 있으면 그것을, 없으면 브라우저 언어를 쓴다.
 export function currentLang(): Lang {
-  const code = navigator.language.toLowerCase().slice(0, 2) as Lang
+  let saved: string | null = null
+  try { saved = localStorage.getItem(LANG_KEY) } catch (e) { /* 저장소를 못 쓰면 브라우저 언어 */ }
+  const code = (saved ?? navigator.language.slice(0, 2)).toLowerCase() as Lang
   return LANGS.includes(code) ? code : 'en'
+}
+
+// 다음 언어로 바꾸고 저장한다.
+export function cycleLang(): Lang {
+  const next = LANGS[(LANGS.indexOf(currentLang()) + 1) % LANGS.length]
+  try { localStorage.setItem(LANG_KEY, next) } catch (e) { /* 저장 실패해도 이번 화면은 바뀐다 */ }
+  return next
 }
 
 export function t(key: Key): string {
