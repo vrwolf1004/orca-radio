@@ -44,7 +44,7 @@ function running(): boolean {
 }
 
 // 이 워커가 띄운 mpv 만 끝낸다. 끝난 뒤에 resolve 한다 (같은 IPC 파이프 이름을 다시 쓰려면 먼저 끝나야 한다).
-function killPlayer(): Promise<void> {
+function killTracked(): Promise<void> {
   const child = player
   player = null
   mpvVolume = null
@@ -103,7 +103,6 @@ async function syncVolume(value: number): Promise<void> {
 
 async function play(url: string, volume: number): Promise<{ volume: number | null }> {
   await killPlayer()
-  await killAllOrcaMpv()
   lastError = null
   const exe = mpvPath()
   if (!exe) {
@@ -130,6 +129,12 @@ async function play(url: string, volume: number): Promise<{ volume: number | nul
 }
 
 // 이 플러그인의 mpv 를 모두 끝낸다 (pid 파일에 의존하지 않는다). 제목 --title=orca-radio 로만 고르므로 herdr-radio 의 mpv 는 건드리지 않는다.
+// 멈출 때는 이 워커가 기억하는 mpv 와, 워커가 바뀌면서 남은 같은 제목의 mpv 를 모두 끝낸다.
+async function killPlayer(): Promise<void> {
+  await killTracked()
+  await killAllOrcaMpv()
+}
+
 function killAllOrcaMpv(): Promise<void> {
   if (process.platform !== 'win32') return Promise.resolve()
   const script = `Get-CimInstance Win32_Process -Filter "Name='mpv.exe'" | Where-Object { $_.CommandLine -like '*${TITLE_ARG}*' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }`
