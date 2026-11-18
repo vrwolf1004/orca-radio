@@ -1,10 +1,8 @@
 // 재생 워커 (trusted-worker). 이 플러그인이 띄운 mpv 한 개만 다룬다.
 // herdr-radio 의 mpv 는 제목·IPC 파이프가 달라 건드리지 않는다. 기존 mpv 를 죽이지 않는다.
 import { execFile, spawn, type ChildProcess } from 'node:child_process'
-import { existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync } from 'node:fs'
 import { createConnection } from 'node:net'
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
 import { validUrl, validVolume } from './logic'
 
 // 패널이 보내는 요청 이름 (src/panel.ts 의 orca.plugin.request 와 맞춘다).
@@ -17,8 +15,6 @@ type Orca = {
 const MPV_CANDIDATES = ['C:\\Program Files\\MPV Player\\mpv.exe', 'C:\\Program Files\\mpv\\mpv.exe']
 const PIPE = '\\\\.\\pipe\\orca-radio-mpv'
 const TITLE_ARG = '--title=orca-radio'
-// 이 워커가 띄운 mpv 의 pid. 워커가 비정상 종료해도 다음 시작 때 이 파일로 찾아 끝낸다.
-const PID_FILE = join(tmpdir(), 'orca-radio-mpv.pid')
 
 let player: ChildProcess | null = null
 let lastError: string | null = null
@@ -52,8 +48,7 @@ function killPlayer(): Promise<void> {
   const child = player
   player = null
   mpvVolume = null
-  rmSync(PID_FILE, { force: true })
-  if (!child || !running()) return Promise.resolve()
+    if (!child || !running()) return Promise.resolve()
   return new Promise((resolve) => {
     child.once('exit', () => resolve())
     if (process.platform === 'win32') {
@@ -108,6 +103,7 @@ async function syncVolume(value: number): Promise<void> {
 
 async function play(url: string, volume: number): Promise<{ volume: number | null }> {
   await killPlayer()
+  await killAllOrcaMpv()
   lastError = null
   const exe = mpvPath()
   if (!exe) {
@@ -120,7 +116,6 @@ async function play(url: string, volume: number): Promise<{ volume: number | nul
     { detached: true, stdio: 'ignore', windowsHide: true }
   )
   player = child
-  if (child.pid !== undefined) writeFileSync(PID_FILE, String(child.pid))
   child.on('error', (error) => {
     lastError = String(error)
     if (player === child) player = null
@@ -128,35 +123,23 @@ async function play(url: string, volume: number): Promise<{ volume: number | nul
   child.once('exit', () => {
     if (player !== child) return
     player = null
-    rmSync(PID_FILE, { force: true })
-  })
+      })
   child.unref()
   await syncVolume(volume)
   return { volume: mpvVolume }
 }
 
-// 이 pid 가 이 플러그인의 mpv 인지 명령줄 제목으로 확인한다 (pid 재사용으로 남의 프로세스를 끝내지 않게).
-function isOrcaMpv(pid: number): Promise<boolean> {
+// 이 플러그인의 mpv 를 모두 끝낸다 (pid 파일에 의존하지 않는다). 제목 --title=orca-radio 로만 고르므로 herdr-radio 의 mpv 는 건드리지 않는다.
+function killAllOrcaMpv(): Promise<void> {
+  if (process.platform !== 'win32') return Promise.resolve()
+  const script = `Get-CimInstance Win32_Process -Filter "Name='mpv.exe'" | Where-Object { $_.CommandLine -like '*${TITLE_ARG}*' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }`
   return new Promise((resolve) => {
-    const script = `(Get-CimInstance Win32_Process -Filter "ProcessId=${pid}").CommandLine`
-    execFile('powershell', ['-NoProfile', '-Command', script], { windowsHide: true }, (error, stdout) => {
-      resolve(!error && stdout.includes(TITLE_ARG))
-    })
+    execFile('powershell', ['-NoProfile', '-Command', script], { windowsHide: true }, () => resolve())
   })
 }
 
-// 워커가 시작할 때 이전에 남은 이 플러그인의 mpv 를 끝낸다. 다른 mpv 는 건드리지 않는다.
-async function cleanupStale(): Promise<void> {
-  if (process.platform !== 'win32' || !existsSync(PID_FILE)) return
-  const pid = Number(readFileSync(PID_FILE, 'utf8'))
-  rmSync(PID_FILE, { force: true })
-  if (!Number.isInteger(pid) || pid <= 0) return
-  if (!(await isOrcaMpv(pid))) return
-  spawn('taskkill', ['/PID', String(pid), '/T', '/F'], { windowsHide: true, stdio: 'ignore' }).unref()
-}
-
 export default function activate(orca: Orca): void {
-  serial(cleanupStale).catch(() => undefined)
+  serial(killAllOrcaMpv).catch(() => undefined)
   orca.panels.handle('play', (input) => {
     const url = validUrl(input?.url)
     const volume = validVolume(input?.volume)

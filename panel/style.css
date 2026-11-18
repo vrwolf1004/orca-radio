@@ -476,3 +476,78 @@ html, body {
     transition: none;
   }
 }
+
+/* 도움말 팝업 (Ctrl+H): 패널 전체를 덮는 반투명 막 위에 카드 */
+.help {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.6);
+}
+
+.help[hidden] {
+  display: none;
+}
+
+.help-box {
+  max-width: 90%;
+  padding: 14px 16px;
+  border-radius: 8px;
+  background: #f3e6c4;
+  color: #2a1a0e;
+  font-size: 12px;
+}
+
+.help-title {
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+.help li {
+  list-style: none;
+  margin: 4px 0;
+}
+
+/* ON AIR 램프: 다이얼 창 오른쪽 아래(눈금과 겹치지 않게). 재생 중(.is-playing)에만 켜진다 */
+.onair {
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: #7a5a2a;
+  opacity: 0.45;
+}
+
+.onair i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #5a3a1a;
+}
+
+.radio.is-playing .onair {
+  opacity: 1;
+  color: #b3261e;
+}
+
+.radio.is-playing .onair i {
+  background: #ff3b1f;
+  box-shadow: 0 0 6px #ff3b1f;
+}
+
+/* 화면에는 숨기고 화면 낭독기에만 읽힌다 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

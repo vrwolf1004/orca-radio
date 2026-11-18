@@ -211,8 +211,16 @@ volumeInput.addEventListener('input', () => {
   void call('volume', { value: Number(volumeInput.value) }).catch(() => undefined)
 })
 // 키보드: 입력 칸(볼륨 슬라이더 포함)에 포커스가 있으면 건드리지 않는다.
+const helpEl = byId<HTMLElement>('help')
+helpEl.addEventListener('click', () => { helpEl.hidden = true })
 document.addEventListener('keydown', (event) => {
   const target = event.target as HTMLElement
+  if (event.ctrlKey && event.key.toLowerCase() === 'h') {
+    event.preventDefault()
+    helpEl.hidden = !helpEl.hidden
+    return
+  }
+  if (event.key === 'Escape' && !helpEl.hidden) helpEl.hidden = true
   if (event.key === 'Escape' && isWindowOpen()) setWindowOpen(false)
   if (target.closest('input, textarea, select, [contenteditable]')) return
   switch (event.key) {

@@ -18,6 +18,7 @@
       <div class="dial-window">
         <div class="dial-scale" aria-hidden="true"><i class="tick" style="left:0.00%"></i><i class="tick" style="left:5.29%"></i><i class="tick" style="left:10.58%"></i><i class="tick" style="left:15.87%"></i><i class="tick" style="left:21.16%"></i><i class="tick" style="left:26.46%"></i><i class="tick" style="left:31.75%"></i><i class="tick" style="left:37.04%"></i><i class="tick" style="left:42.33%"></i><i class="tick" style="left:47.62%"></i><i class="tick" style="left:52.91%"></i><i class="tick" style="left:58.20%"></i><i class="tick" style="left:63.49%"></i><i class="tick" style="left:68.78%"></i><i class="tick" style="left:74.07%"></i><i class="tick" style="left:79.37%"></i><i class="tick" style="left:84.66%"></i><i class="tick" style="left:89.95%"></i><i class="tick" style="left:95.24%"></i><i class="tick" style="left:100.53%"></i><span class="fl" style="left:0.00%">89.1</span><span class="fl" style="left:41.80%">97.0</span><span class="fl" style="left:62.96%">101.0</span><span class="fl" style="left:100.00%">108.0</span></div>
         <div class="needle-track" aria-hidden="true"><div class="needle"></div></div>
+        <div class="onair" aria-hidden="true"><i></i><span>ON AIR</span></div>
         <div id="station-name" class="station-name" data-i18n="station.none">-- No station --</div>
       </div>
     </div>
@@ -42,7 +43,7 @@
       <input id="volume" class="knob" type="range" min="0" max="1" step="0.01" value="0.8">
     </div>
 
-    <div id="status" class="status" data-i18n="status.idle">Ready</div>
+    <div id="status" class="sr-only" aria-live="polite" data-i18n="status.idle">Ready</div>
   </div>
 
   <div id="channel-drawer" class="channel-drawer">
@@ -51,6 +52,20 @@
         <div class="channel-window-head">CHANNEL</div>
         <ul id="station-list" class="station-list"></ul>
       </section>
+    </div>
+  </div>
+
+  <div id="help" class="help" hidden>
+    <div class="help-box">
+      <div class="help-title" data-i18n="help.title">Keyboard shortcuts</div>
+      <ul>
+        <li data-i18n="help.move">← → previous / next station</li>
+        <li data-i18n="help.play">Space play / stop</li>
+        <li data-i18n="help.volume">↑ ↓ volume</li>
+        <li data-i18n="help.lang">F2 change language</li>
+        <li data-i18n="help.help">Ctrl+H show / hide this help</li>
+        <li data-i18n="help.close">Esc or click to close</li>
+      </ul>
     </div>
   </div>
 
