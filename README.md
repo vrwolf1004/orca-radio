@@ -90,12 +90,12 @@ See [docs/README.md](docs/README.md) for details.
 - **The station list is a copy.** Changes to herdr-radio's list are not picked up automatically.
 - **mpv cleanup**: on play and stop, every mpv with `--title=orca-radio` is ended. Other mpv processes (such as herdr-radio's) are left alone.
 
+## License
+
+MIT. See [LICENSE](LICENSE).
+
 ## Support the project
 
 If this project is useful to you, consider buying the developer a coffee.
 
 [![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-Support-FF5E5B?style=for-the-badge&logo=buymeacoffee&logoColor=white)](https://ko-fi.com/dev_ohyt)
-
-## License
-
-MIT. See [LICENSE](LICENSE).
